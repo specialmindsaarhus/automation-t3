@@ -9,6 +9,9 @@ export function LatestPost() {
 
   const utils = api.useUtils();
   const [name, setName] = useState("");
+  const [latest, setLatest] = useState(
+    "Your most recent post: " + latestPost.name,
+  );
   const createPost = api.post.create.useMutation({
     onSuccess: async () => {
       await utils.post.invalidate();
@@ -19,7 +22,20 @@ export function LatestPost() {
   return (
     <div className="w-full max-w-xs">
       {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
+        <>
+          <input
+            type="text"
+            placeholder=""
+            value={latest}
+            onChange={(e) => setLatest(e.target.value)}
+            className="w-full bg-transparent"
+            onFocus={(e) => setLatest(e.target.value.slice(23))}
+            onBlur={(e) =>
+              setLatest("Your most recent post: " + e.target.value)
+            }
+          />
+          <p className="truncate">Your most recent post: {latestPost.name}</p>
+        </>
       ) : (
         <p>You have no posts yet.</p>
       )}
